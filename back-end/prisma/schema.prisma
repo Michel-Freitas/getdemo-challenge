@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Demo {
+  id        String    @id @default(uuid())
+  name      String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+
+  frames Frame[]
+
+  @@map("tb_demo")
+}
+
+model Frame {
+  id        String    @id @default(uuid())
+  html      String
+  order     Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  demoId    String
+  Demo      Demo      @relation(fields: [demoId], references: [id])
+
+  @@map("tb_frame")
+}
