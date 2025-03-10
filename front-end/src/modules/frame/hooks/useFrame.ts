@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { FrameResponse } from "../types/frameResponse.types";
 import { scriptContentEditableText } from "../../../shared/utils/scriptContentEditableText.utils";
+import frameService from "../service/frame.service";
+import useDemo from "../../demo/hooks/useDemo";
 
 interface DataMessage {
   oldTag: string;
@@ -10,6 +12,8 @@ interface DataMessage {
 const useFrame = () => {
   const [frame, setFrame] = useState<FrameResponse>();
   const [htmlContentView, setHtmlContentView] = useState<string>("");
+  const { putFrame } = frameService();
+  const { getDemoDetails } = useDemo();
 
   const viewFrame = (frame: FrameResponse) => {
     setFrame(frame);
@@ -20,6 +24,17 @@ const useFrame = () => {
   const receberMensagem = (evento: MessageEvent<DataMessage>) => {
     const { newTag, oldTag } = evento.data;
     setHtmlContentView((state) => state.replace(oldTag, newTag));
+  };
+
+  const updateFrame = async (
+    frameId: string,
+    demoId: string,
+    htmlContentView: string
+  ) => {
+    await putFrame(frameId, {
+      html: htmlContentView.split("-- REMOVED --")[0],
+    });
+    await getDemoDetails(demoId);
   };
 
   const injectListener = () =>
@@ -35,6 +50,7 @@ const useFrame = () => {
     setHtmlContentView,
     injectListener,
     removeListener,
+    updateFrame,
   };
 };
 
