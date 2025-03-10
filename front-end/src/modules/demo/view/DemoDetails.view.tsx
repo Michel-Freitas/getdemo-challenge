@@ -9,7 +9,8 @@ import Text from "../../../components/ui/Text";
 
 const DemoDetailsView: React.FC = () => {
   const { id } = useParams();
-  const { demo, getDemoDetails, updateFrame } = useDemo();
+  const { demo, getDemoDetails } = useDemo();
+  const { updateFrame } = useFrame();
   const { htmlContentView, viewFrame, injectListener, removeListener, frame } =
     useFrame();
 
@@ -48,8 +49,9 @@ const DemoDetailsView: React.FC = () => {
             type="success"
             text="Salvar"
             className="mt-5"
+            disabled={!frame}
             handlerClick={() =>
-              updateFrame({ ...frame, html: htmlContentView })
+              updateFrame(frame!.id!, demo!.id!, htmlContentView)
             }
           />
         </div>

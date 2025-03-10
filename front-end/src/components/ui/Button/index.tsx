@@ -1,6 +1,7 @@
 type Props = {
   type?: "primary" | "secondary" | "success" | "cancel";
   text: string;
+  disabled?: boolean;
   handlerClick: () => void;
   className?: React.HTMLProps<HTMLElement>["className"];
 };
@@ -9,6 +10,7 @@ const Button: React.FC<Props> = ({
   type = "primary",
   text,
   handlerClick,
+  disabled = false,
   className,
 }) => {
   const baseStyle =
@@ -26,6 +28,7 @@ const Button: React.FC<Props> = ({
     <button
       className={`${baseStyle} ${typeStyle[type]} ${className}`}
       onClick={handlerClick}
+      disabled={disabled}
     >
       {text}
     </button>
